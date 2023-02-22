@@ -1,5 +1,4 @@
 export const getGoogleUrl = (from) => {
-  console.log("inside getGoogleUrl");
   try {
     const rootUrl = `https://accounts.google.com/o/oauth2/v2/auth`;
 
