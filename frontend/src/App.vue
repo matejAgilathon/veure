@@ -4,6 +4,10 @@
   </div>
 </template>
 
+<script>
+// import dotenv from "dotenv";
+// dotenv.config();
+</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
