@@ -1,11 +1,25 @@
 const axios = require("axios")
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
+
+/**
+ * An array containing dummy data for testing purposes.
+ *
+ * @type {Array<{ name: string, email: string }>}
+ *
+ * @description
+ * This array can only contain objects that have a `name` property of type string
+ * and an `email` property of type string. Any other objects or types will not be
+ * accepted and will result in a runtime error.
+ */
+const dummyDatabase = []
 
 const authThroughGoogle = async (req, res) => {
   try {
@@ -28,8 +42,6 @@ const authThroughGoogle = async (req, res) => {
       },
     });
     const { id_token, access_token } = data;
-    // const urlForGettingUserInfo =
-    //   "https://www.googleapis.com/oauth2/v2/userinfo";
     const userData = await axios({
       // urlForGettingUserInfo,
       url: `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
@@ -38,20 +50,24 @@ const authThroughGoogle = async (req, res) => {
         Authorization: `Bearer ${id_token}`,
       },
     });
-    console.log({ username: userData.data.name, email: userData.data.email });
     const body = {
       username: userData.data.name,
       email: userData.data.email,
+      picture: userData.data.picture,
       serviceProvider: "google",
     };
     // await User.create(body); // store data to database - here you can add your logic for either signing up or signing in a user. I am assuming I have a model called User, I am using Sequelize's create method to insert the user data into this model...
-    const ourOwnToken = jwt.sign(body, process.env.SESSION_SECRET);
-    console.log("ourOwnToken", ourOwnToken);
+    if (!dummyDatabase.some(user => user.email === body.email)) dummyDatabase.push(body)
     // create token with the body variable above
-    return res.status(200).json({
-      success: true,
-      token: ourOwnToken,
-    });
+    const ourOwnToken = jwt.sign(body, process.env.SESSION_SECRET, {
+      expiresIn: "10s",
+    }
+    );
+    res.cookie("token", ourOwnToken);
+    res.cookie("username", body.username)
+    res.cookie("picture", body.picture)
+    res.redirect("http://localhost:8080/#/dashboard");
+
   } catch (err) {
     return res.status(500).json({
       success: false,
@@ -62,9 +78,29 @@ const authThroughGoogle = async (req, res) => {
 
 app.get("/api/sessions/oauth/google", authThroughGoogle);
 
+app.get("/testToken", verifyToken, (req, res) => {
+  res.json({ success: true });
+});
+
 app.listen(8000, () => {
   console.log("Server started on port 8000");
 } );
 
 
 
+function verifyToken(req, res, next) {
+  const token = req.headers.authorization.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "No token provided" });
+  }
+
+  jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Failed to authenticate token" });
+    }
+
+    // The token is valid, save the decoded token for use in other routes
+    req.decoded = decoded;
+    next();
+  });
+}
