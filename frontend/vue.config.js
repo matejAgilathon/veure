@@ -1,4 +1,17 @@
-const { defineConfig } = require("@vue/cli-service");
-module.exports = defineConfig({
-  transpileDependencies: true,
-});
+const webpack = require("webpack");
+
+module.exports = {
+  configureWebpack: {
+    resolve: {
+      fallback: {
+        crypto: require.resolve("crypto-browserify"),
+        stream: require.resolve("stream-browserify"),
+      },
+    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        process: "process/browser",
+      }),
+    ],
+  },
+};
