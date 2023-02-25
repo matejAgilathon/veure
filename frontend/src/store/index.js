@@ -4,9 +4,18 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    user: {
+      username: "",
+      userPhotoUrl: "",
+    },
+  },
   getters: {},
-  mutations: {},
+  mutations: {
+    setToken(state, token) {
+      state.token = token;
+    },
+  },
   actions: {},
   modules: {},
 });
