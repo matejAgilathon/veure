@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <div>Heey {{ $store.state.user.username }}, this is a dashboard</div>
+    <div>Hello, {{ $store.state.user.username }}</div>
     <img :src="$store.state.user.userPhotoUrl" alt="user photo" />
     <button @click="testTokenRoute">Test Route</button>
   </div>
@@ -18,14 +18,20 @@ export default {
   },
   methods: {
     testTokenRoute() {
-      fetch("http://localhost:8000/testToken", {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((error) => console.error(error));
+      try {
+        const response = fetch(
+          `${process.env.VUE_APP_SERVER_ENDPOINT}/testToken`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.token}`,
+            },
+          }
+        );
+        const data = response.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
