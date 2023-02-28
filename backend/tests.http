@@ -1,0 +1,12 @@
+### Get a user 
+http://localhost:8000/api/users
+
+### Create a user with POST request
+POST http://localhost:8000/api/users
+{
+    "username": "John Doe",
+    "email": "john@doe.com",
+    //picture link
+    "picture": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+    "serviceProvider": "google"
+}

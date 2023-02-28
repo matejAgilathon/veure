@@ -1,8 +1,41 @@
+require("dotenv").config();
 const axios = require("axios")
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
-require("dotenv").config();
+//joining postgres sequlize
+const { Sequelize } = require('sequelize');
+const { User } = require("./models");
+const db = require("./models");
+
+const sequelize = new Sequelize("postgres://example_user:example_password@127.0.0.1:5432/example_db");
+
+  //code above rewriten with async await
+  const testConnection = async () => {
+    try {
+      await sequelize.authenticate();
+      console.log('Connection has been established successfully.');
+    } catch (error) {
+      console.error('Unable to connect to the database:', error);
+    }
+  }
+  testConnection();
+
+//insert new user into database
+const insertUser = async userData => {
+  try {
+    const { username, email, picture, serviceProvider } = userData;
+    const user = await db.user.create({
+      username,
+      email,
+      picture,
+      serviceProvider,
+    });
+    console.log("user created successfully: ", user);
+  } catch (err) {
+    console.log(`unhandled error ` + err);
+  }
+};
 
 const app = express();
 
@@ -56,8 +89,8 @@ const authThroughGoogle = async (req, res) => {
       picture: userData.data.picture,
       serviceProvider: "google",
     };
-    // await User.create(body); // store data to database - here you can add your logic for either signing up or signing in a user. I am assuming I have a model called User, I am using Sequelize's create method to insert the user data into this model...
-    if (!dummyDatabase.some(user => user.email === body.email)) dummyDatabase.push(body)
+    await insertUser(body); // store data to database - here you can add your logic for either signing up or signing in a user. I am assuming I have a model called User, I am using Sequelize's create method to insert the user data into this model...
+    // if (!dummyDatabase.some(user => user.email === body.email)) dummyDatabase.push(body)
     // create token with the body variable above
     const ourOwnToken = jwt.sign(body, process.env.SESSION_SECRET, {
       expiresIn: "10s",
@@ -82,9 +115,22 @@ app.get("/testToken", verifyToken, (req, res) => {
   res.json({ success: true });
 });
 
-app.listen(8000, () => {
-  console.log("Server started on port 8000");
-} );
+//route to log all the users in the db
+app.get("/api/users", async (req, res) => {
+  try {
+    const users = await db.user.findAll();
+    res.json(users)
+    console.log(users);
+  } catch (err) {
+    console.log(`unhandled error ` + err);
+  }
+});
+
+db.sequelize.sync().then((req) => {
+  app.listen(8000, () => {
+    console.log("Server started on port 8000");
+  } );
+});
 
 
 
