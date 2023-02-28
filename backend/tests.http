@@ -1,4 +1,4 @@
-### Get a user 
+### Get all users
 http://localhost:8000/api/users
 
 ### Create a user with POST request
