@@ -1,6 +1,8 @@
 const axios = require("axios");
-const { encode } = require("../utils/jwt");
+const { encode, isTokenValid } = require("../utils/jwt");
 const { insertUser } = require("../utils/insertUser");
+const { insertToken } = require("../utils/insertToken");
+const db = require("../models");
 
 const authThroughGoogle = async (req, res) => {
   try {
@@ -37,14 +39,98 @@ const authThroughGoogle = async (req, res) => {
       picture: userData.data.picture,
       serviceProvider: "google",
     };
-    await insertUser(body);
-    // create token with the body variable above
-    // const ourOwnToken = jwt.sign(body, process.env.SESSION_SECRET, { expiresIn: "10s" });
-    const ourOwnToken = encode(body, "10s");
-    res.cookie("token", ourOwnToken);
-    res.cookie("username", body.username);
-    res.cookie("picture", body.picture);
-    res.redirect("http://localhost:8080/#/dashboard");
+    //check if user exists  in database, if not add user to database
+    if(!body.username || !body.email || !body.picture) {
+      return res.status(500).json({
+        success: false,
+        err: "missing data from google",
+      });
+    }
+    const userExists = await db.user.findOne({
+      where: {
+        email: body.email,
+      },
+    });
+    if (userExists) {
+      const user = await db.user.findByPk(userExists.dataValues.id);
+      //use refresh token from the database to create a new token
+      const refreshToken = await db.refresh_token.findOne({
+        where: {
+          userId: user.dataValues.id,
+        },
+      });
+
+      const isValid = isTokenValid(refreshToken.dataValues.value, process.env.SESSION_SECRET);
+
+      if(!isValid) {
+        return res.status(500).json({
+          success: false,
+          err: "missing refresh token",
+        });
+      }
+      const ourOwnToken = encode(body, "30s");
+      res.cookie("token", ourOwnToken);
+      res.cookie("username", user.dataValues.username);
+      res.cookie("picture", user.dataValues.picture);
+      res.redirect("http://localhost:8080/#/dashboard");
+      return;
+
+
+      // console.log("refreshToken", refreshToken)
+
+
+
+      // const ourOwnToken = encode(body, "30s");
+
+      // res.cookie("token", ourOwnToken);
+      // res.cookie("username", user.dataValues.username);
+      // res.cookie("picture", user.dataValues.picture);
+      // res.redirect("http://localhost:8080/#/dashboard");
+      // return;
+    } else {
+      const insertedUser = await insertUser(body);
+      const refreshTokenString = encode(body, "5d");
+      //insert token into database
+      const user = await db.user.findByPk(insertedUser.dataValues.id);
+      // const refreshToken = await db.refresh_token.create({
+      //   value: refreshTokenString,
+      //   userId: user.dataValues.id,
+      // });
+      // console.log("refreshToken", refreshToken)
+      const refreshTokenInserted = await insertToken(user.dataValues.id, refreshTokenString);
+      console.log("refreshTokenInserted", refreshTokenInserted)
+      const ourOwnToken = encode(body, "30s");
+      //insert token into database
+      res.cookie("token", ourOwnToken);
+      res.cookie("username", user.dataValues.username);
+      res.cookie("picture", user.dataValues.picture);
+      res.redirect("http://localhost:8080/#/dashboard");
+      return;
+    }
+
+
+    // const insertedUser = await insertUser(body);
+
+    // console.log(insertedUser.dataValues.id);
+    // const refreshTokenString = encode(body, "5d");
+
+    // //insert token into database
+    // const user = await db.user.findByPk(insertedUser.dataValues.id);
+    // // const refreshToken = await RefreshToken.create({
+    // //   token: refreshTokenString,
+    // //   userId: user.id,
+    // // });
+    // // console.log("refreshToken", refreshToken)
+    // const refreshTokenInserted = await insertToken(user.id,refreshTokenString);
+    // console.log("refreshTokenInserted", refreshTokenInserted)
+    
+
+    // const ourOwnToken = encode(body, "10s");
+    // //insert token into database
+    // res.cookie("token", ourOwnToken);
+    // res.cookie("username", body.username);
+    // res.cookie("picture", body.picture);
+    // res.redirect("http://localhost:8080/#/dashboard");
   } catch (err) {
     return res.status(500).json({
       success: false,
