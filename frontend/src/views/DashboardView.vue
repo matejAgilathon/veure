@@ -36,3 +36,22 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  gap: 1rem;
+}
+//make img round with shadow an border
+img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 5px #ccc;
+}
+</style>
