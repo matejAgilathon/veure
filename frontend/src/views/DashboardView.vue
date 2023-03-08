@@ -19,14 +19,12 @@ export default {
   methods: {
     testTokenRoute() {
       try {
-        const response = fetch(
-          `${process.env.VUE_APP_SERVER_ENDPOINT}/testToken`,
-          {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.token}`,
-            },
-          }
-        );
+        const uri = `${process.env.VUE_APP_SERVER_ENDPOINT}/api/testToken`;
+        const response = fetch(uri, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+          },
+        });
         const data = response.json();
         console.log(data);
       } catch (error) {

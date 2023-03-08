@@ -28,4 +28,12 @@ function encode(body, expiration) {
   return token;
 }
 
-module.exports = { verifyToken, encode };
+const isTokenValid = (token, secret) => {
+  try {
+    return jwt.verify(token, secret);
+  } catch (error) {
+    return false;
+  }
+};
+
+module.exports = { verifyToken, encode, isTokenValid };

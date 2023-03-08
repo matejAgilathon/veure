@@ -1,6 +1,6 @@
 //controlers for user
 
-const db = require("../models");
+const { User } = require("../models");
 // const { verifyToken, encode } = require("../utils/verifyToken");
 // const { Op } = require("sequelize");
 // const { User } = db.sequelize.models;
@@ -22,7 +22,7 @@ const db = require("../models");
 
 const getUsers = async (req, res) => {
   try {
-    const users = await db.user.findAll();
+    const users = await User.findAll();
     res.json(users);
     console.log(users);
   } catch (err) {

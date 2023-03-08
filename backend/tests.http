@@ -10,3 +10,6 @@ POST http://localhost:8000/api/users
     "picture": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
     "serviceProvider": "google"
 }
+
+### Get test token route
+http://localhost:8000/api/testToken
