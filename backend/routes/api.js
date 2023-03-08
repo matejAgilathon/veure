@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const { authThroughGoogle } = require("../controllers/googleAuth");
+const { logout } = require("../controllers/logout");
 const { verifyToken } = require("../utils/jwt");
 
 //controllers
@@ -19,5 +20,7 @@ router.get("/testToken", verifyToken, (req, res) => {
 });
 
 router.get("/users", getUsers);
+
+router.post("/logout", logout);
 
 module.exports = router;
