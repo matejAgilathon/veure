@@ -6,9 +6,9 @@ const db = require("./models");
 const api = require("./routes/api");
 
 //middleware
-app.use("/api", api)
 app.use(express.json());
 app.use(cors());
+app.use("/api", api)
 
 db.sequelize.sync().then((req) => {
   app.listen(8000, () => {

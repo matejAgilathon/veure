@@ -1,27 +1,21 @@
 const axios = require("axios");
 const { encode, isTokenValid } = require("../utils/jwt");
 const { insertUser } = require("../utils/insertUser");
-const { insertToken } = require("../utils/insertToken");
-const db = require("../models");
+const { User } = require("../models");
 
 const authThroughGoogle = async (req, res) => {
   try {
     const { code } = req.query; // code from service provider which is appended to the frontend's URL
-    const client_id = process.env.GOOGLE_OAUTH_CLIENT_ID;
-    const client_secret = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
-    const redirect_uri = process.env.GOOGLE_OAUTH_REDIRECT_URI;
-    // The client_id and client_secret should always be private, put them in the .env file
-    const grant_type = "authorization_code"; // this tells the service provider to return a code which will be used to get a token for making requests to the service provider
     const url = "https://oauth2.googleapis.com/token"; // link to api to exchange code for token.
     const { data } = await axios({
       url,
       method: "POST",
       params: {
-        client_id,
-        client_secret,
-        redirect_uri,
+        client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
+        client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+        redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URI,
         code,
-        grant_type,
+        grant_type: "authorization_code", // this tells the service provider to return a code which will be used to get a token for making requests to the service provider
       },
     });
     const { id_token, access_token } = data;
@@ -46,26 +40,20 @@ const authThroughGoogle = async (req, res) => {
         err: "missing data from google",
       });
     }
-    const userExists = await db.user.findOne({
+    const user = await User.findOne({
       where: {
         email: body.email,
       },
     });
-    if (userExists) {
-      const user = await db.user.findByPk(userExists.dataValues.id);
+    if (user) {
       //use refresh token from the database to create a new token
-      const refreshToken = await db.refresh_token.findOne({
-        where: {
-          userId: user.dataValues.id,
-        },
-      });
-
-      const isValid = isTokenValid(refreshToken.dataValues.value, process.env.SESSION_SECRET);
-
+      const refreshTokenValue = (await user.getRefreshTokens())[0].dataValues
+        .value;
+      const isValid = isTokenValid(refreshTokenValue, process.env.SESSION_SECRET);
       if(!isValid) {
         return res.status(500).json({
           success: false,
-          err: "missing refresh token",
+          err: "refresh token is not valid",
         });
       }
       const ourOwnToken = encode(body, "30s");
@@ -74,63 +62,19 @@ const authThroughGoogle = async (req, res) => {
       res.cookie("picture", user.dataValues.picture);
       res.redirect("http://localhost:8080/#/dashboard");
       return;
-
-
-      // console.log("refreshToken", refreshToken)
-
-
-
-      // const ourOwnToken = encode(body, "30s");
-
-      // res.cookie("token", ourOwnToken);
-      // res.cookie("username", user.dataValues.username);
-      // res.cookie("picture", user.dataValues.picture);
-      // res.redirect("http://localhost:8080/#/dashboard");
-      // return;
     } else {
       const insertedUser = await insertUser(body);
       const refreshTokenString = encode(body, "5d");
-      //insert token into database
-      const user = await db.user.findByPk(insertedUser.dataValues.id);
-      // const refreshToken = await db.refresh_token.create({
-      //   value: refreshTokenString,
-      //   userId: user.dataValues.id,
-      // });
-      // console.log("refreshToken", refreshToken)
-      const refreshTokenInserted = await insertToken(user.dataValues.id, refreshTokenString);
-      console.log("refreshTokenInserted", refreshTokenInserted)
+      insertedUser.createRefreshToken({ value: refreshTokenString });
+      // console.log("refreshTokenInserted", refreshTokenInserted)
       const ourOwnToken = encode(body, "30s");
       //insert token into database
       res.cookie("token", ourOwnToken);
-      res.cookie("username", user.dataValues.username);
-      res.cookie("picture", user.dataValues.picture);
+      res.cookie("username", insertedUser.dataValues.username);
+      res.cookie("picture", insertedUser.dataValues.picture);
       res.redirect("http://localhost:8080/#/dashboard");
       return;
     }
-
-
-    // const insertedUser = await insertUser(body);
-
-    // console.log(insertedUser.dataValues.id);
-    // const refreshTokenString = encode(body, "5d");
-
-    // //insert token into database
-    // const user = await db.user.findByPk(insertedUser.dataValues.id);
-    // // const refreshToken = await RefreshToken.create({
-    // //   token: refreshTokenString,
-    // //   userId: user.id,
-    // // });
-    // // console.log("refreshToken", refreshToken)
-    // const refreshTokenInserted = await insertToken(user.id,refreshTokenString);
-    // console.log("refreshTokenInserted", refreshTokenInserted)
-    
-
-    // const ourOwnToken = encode(body, "10s");
-    // //insert token into database
-    // res.cookie("token", ourOwnToken);
-    // res.cookie("username", body.username);
-    // res.cookie("picture", body.picture);
-    // res.redirect("http://localhost:8080/#/dashboard");
   } catch (err) {
     return res.status(500).json({
       success: false,

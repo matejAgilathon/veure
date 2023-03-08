@@ -1,9 +1,9 @@
-const db = require("../models");
+const { User } = require("../models");
 
 const insertUser = async (userData) => {
   try {
     const { username, email, picture, serviceProvider } = userData;
-    return await db.user.create({
+    return await User.create({
       username,
       email,
       picture,

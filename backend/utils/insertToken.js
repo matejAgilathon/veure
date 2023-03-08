@@ -1,8 +1,8 @@
-const db = require("../models/index.js");
+const { RefreshToken } = require("../models/index.js");
 
 const insertToken = async (userID, tokenString) => {
   try {
-    return await db.refresh_token.create({
+    return await RefreshToken.create({
       value: tokenString,
       userId: userID,
     });

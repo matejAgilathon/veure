@@ -1,27 +1,21 @@
 module.exports = (sequelize, DataTypes) => {
-  const RefreshToken = sequelize.define("refresh_token", {
-    // id: {
-    //   type: DataTypes.INTEGER,
-    //   primaryKey: true,
-    //   autoIncrement: true,
-    //   unique: true,
-    // },
+  const RefreshToken = sequelize.define("RefreshToken", {
     value: {
       type: DataTypes.TEXT,
       unique: true,
     },
   });
+
+  RefreshToken.associate = (models) => {
+    RefreshToken.belongsTo(models.User, {
+      foreignKey: "userId",
+      as: "user",
+      onDelete: "CASCADE"
+    });
+  };
+
   return RefreshToken;
 };
-
-//create a refresh token with reference on user
-// const refreshToken = await RefreshToken.create({
-//   token: refreshTokenString,
-//   userId: user.id,
-// });
-
-//explanation how userId reference works:
-//https://sequelize.org/master/manual/assocs.html#one-to-many-associations
 
 
 
