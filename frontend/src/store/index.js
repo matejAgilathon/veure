@@ -23,6 +23,7 @@ export default new Vuex.Store({
             "http://localhost:8000/api/logout",
             {
               token: state.token,
+              username: state.user.username,
             }
           );
           console.log("Logout response", response);
