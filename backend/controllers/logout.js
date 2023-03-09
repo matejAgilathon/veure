@@ -1,15 +1,13 @@
 //this controller deletes the refresh token and invalidates access tokens on logout
 const { RefreshToken, User } = require("../models");
-const jwt = require("jsonwebtoken");
 
 const logout = async (req, res) => {
   try {
-    const { token } = req.body;
-    // get the email from the decoded token
-    const { email } = jwt.verify(token, process.env.SESSION_SECRET);
+    const { username, token } = req.body;
+
     const user = await User.findOne({
       where: {
-        email,
+        username,
       },
     });
     // invalidate the token from the body by placing it inside the blacklist
