@@ -16,19 +16,27 @@ export default new Vuex.Store({
     setToken(state, token) {
       state.token = token;
     },
-    async logout(state) {
-      try {
-        const response = await axios.post("http://localhost:8000/api/logout", {
-          token: state.token,
-        });
-        state.token = "";
-        state.user.username = "";
-        state.user.userPhotoUrl = "";
-        return response.data;
-      } catch (error) {
-        console.log("Logout failed", error);
-        throw error;
-      }
+    logout(state, vi) {
+      (async function () {
+        try {
+          const response = await axios.post(
+            "http://localhost:8000/api/logout",
+            {
+              token: state.token,
+            }
+          );
+          console.log("Logout response", response);
+          if (response.status === 204) {
+            state.token = "";
+            state.user.username = "";
+            state.user.userPhotoUrl = "";
+            vi.$router.push("/");
+          }
+        } catch (error) {
+          console.log("Logout failed", error);
+          throw error;
+        }
+      })();
     },
   },
   actions: {},

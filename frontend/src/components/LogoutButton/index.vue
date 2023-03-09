@@ -9,8 +9,8 @@ export default {
   name: "LogoutButton",
   methods: {
     logout() {
-      this.$store.commit("logout");
-      this.$router.push("/");
+      this.$store.commit("logout", this);
+      // this.$router.push("/");
     },
   },
 };

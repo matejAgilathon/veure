@@ -12,6 +12,10 @@ const logout = async (req, res) => {
         email,
       },
     });
+    // invalidate the token from the body by placing it inside the blacklist
+    await user.createBlacklistedToken({ value: token });
+
+    // delete the refresh token
     const refreshToken = await RefreshToken.findOne({
       where: {
         userId: user.id,

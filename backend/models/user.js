@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
       as: "refreshTokens",
     });
+    User.hasMany(models.BlacklistedToken, {
+      foreignKey: "userId",
+      as: "blacklistedTokens",
+    });
   };
 
   return User;
