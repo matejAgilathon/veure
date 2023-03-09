@@ -3,11 +3,13 @@
     <div>Hello, {{ $store.state.user.username }}</div>
     <img :src="$store.state.user.userPhotoUrl" alt="user photo" />
     <button @click="testTokenRoute">Test Route</button>
+    <LogoutButton />
   </div>
 </template>
 
 <script>
 import VueCookies from "vue-cookies";
+import LogoutButton from "@/components/LogoutButton";
 
 export default {
   name: "DashboardView",
@@ -15,6 +17,9 @@ export default {
     this.$store.state.user.username = VueCookies.get("username");
     this.$store.state.user.userPhotoUrl = VueCookies.get("picture");
     this.$store.commit("setToken", VueCookies.get("token"));
+  },
+  components: {
+    LogoutButton,
   },
   methods: {
     testTokenRoute() {

@@ -47,9 +47,17 @@ const authThroughGoogle = async (req, res) => {
     });
     if (user) {
       //use refresh token from the database to create a new token
-      const refreshTokenValue = (await user.getRefreshTokens())[0].dataValues
-        .value;
-      const isValid = isTokenValid(refreshTokenValue, process.env.SESSION_SECRET);
+      const refreshTokenData = await user.getRefreshTokens()
+      let refreshTokenValue = refreshTokenData.length && refreshTokenData[0].dataValues.value;
+      console.log("refreshTokenValue", refreshTokenValue)
+      if(!refreshTokenValue) {
+        generatedToken = await user.createRefreshToken({ value: encode(body, "5d") });
+        refreshTokenValue = generatedToken.dataValues.value;
+      }
+      const isValid = isTokenValid(
+        refreshTokenValue,
+        process.env.SESSION_SECRET
+      );
       if(!isValid) {
         return res.status(500).json({
           success: false,

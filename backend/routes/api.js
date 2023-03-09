@@ -1,10 +1,12 @@
 const { Router } = require("express");
 const router = Router();
 const { authThroughGoogle } = require("../controllers/googleAuth");
+const { logout } = require("../controllers/logout");
 const { verifyToken } = require("../utils/jwt");
 
 //controllers
 const { createUser, getUserByID, getUsers, deleteUser, updateUser } = require("../controllers/users");
+const { checkTokenBlacklist } = require("../utils/checkTokenBlacklist");
 
 //routes
 // router.get("/users", verifyToken, getUsers);
@@ -14,10 +16,12 @@ const { createUser, getUserByID, getUsers, deleteUser, updateUser } = require(".
 
 router.get("/sessions/oauth/google", authThroughGoogle);
 
-router.get("/testToken", verifyToken, (req, res) => {
+router.get("/testToken", verifyToken, checkTokenBlacklist, (req, res) => {
   res.json({ success: true });
 });
 
 router.get("/users", getUsers);
+
+router.post("/logout", logout);
 
 module.exports = router;
