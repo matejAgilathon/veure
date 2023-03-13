@@ -3,15 +3,19 @@ const { RefreshToken, User } = require("../models");
 
 const logout = async (req, res) => {
   try {
-    const { username, token } = req.body;
+    const { userId, accessToken } = req.body;
+
+    const httpCookie = req.cookies.testCookie;
+    // console.log("req.headers", req.headers);
+    console.log("httpCookie", httpCookie)
 
     const user = await User.findOne({
       where: {
-        username,
+        id: Number(userId),
       },
     });
     // invalidate the token from the body by placing it inside the blacklist
-    await user.createBlacklistedToken({ value: token });
+    await user.createBlacklistedToken({ value: accessToken });
 
     // delete the refresh token
     const refreshToken = await RefreshToken.findOne({

@@ -51,7 +51,7 @@ const authThroughGoogle = async (req, res) => {
       let refreshTokenValue = refreshTokenData.length && refreshTokenData[0].dataValues.value;
       console.log("refreshTokenValue", refreshTokenValue)
       if(!refreshTokenValue) {
-        generatedToken = await user.createRefreshToken({ value: encode(body, "5d") });
+        const generatedToken = await user.createRefreshToken({ value: encode({...body, userId: user.dataValues.id}, "5d") });
         refreshTokenValue = generatedToken.dataValues.value;
       }
       const isValid = isTokenValid(
@@ -68,6 +68,9 @@ const authThroughGoogle = async (req, res) => {
       res.cookie("token", ourOwnToken);
       res.cookie("username", user.dataValues.username);
       res.cookie("picture", user.dataValues.picture);
+      res.cookie("userId", user.dataValues.id);
+      //http only cookie
+      res.cookie("testCookie", "testradi", { httpOnly: true, sameSite: false })
       res.redirect("http://localhost:8080/#/dashboard");
       return;
     } else {
@@ -80,6 +83,7 @@ const authThroughGoogle = async (req, res) => {
       res.cookie("token", ourOwnToken);
       res.cookie("username", insertedUser.dataValues.username);
       res.cookie("picture", insertedUser.dataValues.picture);
+      res.cookie("useId", insertedUser.dataValues.id);
       res.redirect("http://localhost:8080/#/dashboard");
       return;
     }

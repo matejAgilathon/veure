@@ -13,28 +13,34 @@ import LogoutButton from "@/components/LogoutButton";
 
 export default {
   name: "DashboardView",
-  mounted() {
+  created() {
+    // this.$store.commit("testConnection");
     this.$store.state.user.username = VueCookies.get("username");
     this.$store.state.user.userPhotoUrl = VueCookies.get("picture");
-    this.$store.commit("setToken", VueCookies.get("token"));
+    this.$store.state.user.userId = VueCookies.get("userId");
+    this.$store.commit("setToken", {
+      accessToken: VueCookies.get("token"),
+      userId: VueCookies.get("userId"),
+    });
   },
   components: {
     LogoutButton,
   },
   methods: {
     testTokenRoute() {
-      try {
-        const uri = `${process.env.VUE_APP_SERVER_ENDPOINT}/api/testToken`;
-        const response = fetch(uri, {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.token}`,
-          },
-        });
-        const data = response.json();
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
+      const uri = `${process.env.VUE_APP_SERVER_ENDPOINT}/api/testToken`;
+      fetch(uri, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        },
+        body: JSON.stringify({
+          username: this.$store.state.user.username,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.log(error));
     },
   },
 };

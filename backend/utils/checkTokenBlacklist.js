@@ -4,10 +4,10 @@ const checkTokenBlacklist = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     //get the user email from request
-    const { email } = req.body;
+    const { username } = req.body;
     const user = await User.findOne({
       where: {
-        email
+        username
       },
     });
     const blacklistedTokenList = await user.getBlacklistedTokens({
