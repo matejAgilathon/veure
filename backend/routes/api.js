@@ -3,6 +3,7 @@ const router = Router();
 const { authThroughGoogle } = require("../controllers/googleAuth");
 const { logout } = require("../controllers/logout");
 const { verifyToken } = require("../utils/jwt");
+const { sessionValidation } = require("../controllers/sessionValidation");
 
 //controllers
 const { createUser, getUserByID, getUsers, deleteUser, updateUser } = require("../controllers/users");
@@ -16,11 +17,13 @@ const { checkTokenBlacklist } = require("../utils/checkTokenBlacklist");
 
 router.get("/sessions/oauth/google", authThroughGoogle);
 
-router.get("/testToken", verifyToken, checkTokenBlacklist, (req, res) => {
+router.post("/testToken", verifyToken, checkTokenBlacklist, (req, res) => {
   res.json({ success: true });
 });
 
 router.get("/users", getUsers);
+
+router.post("/session/validation", sessionValidation);
 
 router.post("/logout", logout);
 
