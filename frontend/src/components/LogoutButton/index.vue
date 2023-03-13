@@ -1,7 +1,5 @@
 <template>
-  <div class="logout">
-    <button @click="logout">Logout</button>
-  </div>
+  <button class="logout" @click="logout">Logout</button>
 </template>
 
 <script>
@@ -19,11 +17,9 @@ export default {
 <style lang="scss" scoped>
 // style logout button
 .logout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 80vh;
-  gap: 1rem;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  border-color: 1px solid #ccc;
+  box-shadow: 1px 1px 1px #000;
 }
 </style>

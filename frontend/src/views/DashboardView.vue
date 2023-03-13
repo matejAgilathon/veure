@@ -1,15 +1,19 @@
 <template>
   <div class="dashboard">
-    <div>Hello, {{ $store.state.user.username }}</div>
-    <img :src="$store.state.user.userPhotoUrl" alt="user photo" />
-    <button @click="testTokenRoute">Test Route</button>
-    <LogoutButton />
+    <nav>
+      <div>Hello, {{ $store.state.user.username }}</div>
+      <img :src="$store.state.user.userPhotoUrl" alt="user photo" />
+      <LogoutButton />
+    </nav>
+    <ConnectionsList />
+    <!-- <button @click="testTokenRoute">Test Route</button> -->
   </div>
 </template>
 
 <script>
 import VueCookies from "vue-cookies";
 import LogoutButton from "@/components/LogoutButton";
+import ConnectionsList from "@/components/ConnectionsList";
 
 export default {
   name: "DashboardView",
@@ -25,6 +29,7 @@ export default {
   },
   components: {
     LogoutButton,
+    ConnectionsList,
   },
   methods: {
     testTokenRoute() {
@@ -52,13 +57,22 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 80vh;
+  // height: 80vh;
   gap: 1rem;
+}
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  // padding: 1rem;
 }
 //make img round with shadow an border
 img {
-  width: 150px;
-  height: 150px;
+  // width: 150px;
+  // height: 150px;
+  height: 2em;
   border-radius: 50%;
   border: 1px solid #ccc;
   box-shadow: 0 0 5px #ccc;

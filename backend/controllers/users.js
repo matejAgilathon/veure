@@ -23,8 +23,8 @@ const { User } = require("../models");
 const getUsers = async (req, res) => {
   try {
     const users = await User.findAll();
-    res.json(users);
     console.log(users);
+    res.json(users);
   } catch (err) {
     console.log(`unhandled error ` + err);
   }
