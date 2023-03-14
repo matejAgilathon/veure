@@ -1,13 +1,10 @@
-//this controller deletes the refresh token and invalidates access tokens on logout
 const { RefreshToken, User } = require("../models");
 
 const logout = async (req, res) => {
   try {
-    const { userId, accessToken } = req.body;
+    const { userId } = req.body;
 
-    const httpCookie = req.cookies.testCookie;
-    // console.log("req.headers", req.headers);
-    console.log("httpCookie", httpCookie)
+    const accessToken = req.cookies.token;
 
     const user = await User.findOne({
       where: {

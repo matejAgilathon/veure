@@ -65,25 +65,22 @@ const authThroughGoogle = async (req, res) => {
         });
       }
       const ourOwnToken = encode(body, "30s");
-      res.cookie("token", ourOwnToken);
+      res.cookie("token", ourOwnToken, { httpOnly: true });
       res.cookie("username", user.dataValues.username);
       res.cookie("picture", user.dataValues.picture);
       res.cookie("userId", user.dataValues.id);
-      //http only cookie
-      res.cookie("testCookie", "testradi", { httpOnly: true, sameSite: false })
       res.redirect("http://localhost:8080/#/dashboard");
       return;
     } else {
       const insertedUser = await insertUser(body);
       const refreshTokenString = encode(body, "5d");
       insertedUser.createRefreshToken({ value: refreshTokenString });
-      // console.log("refreshTokenInserted", refreshTokenInserted)
       const ourOwnToken = encode(body, "30s");
       //insert token into database
-      res.cookie("token", ourOwnToken);
+      res.cookie("token", ourOwnToken, { httpOnly: true });
       res.cookie("username", insertedUser.dataValues.username);
       res.cookie("picture", insertedUser.dataValues.picture);
-      res.cookie("useId", insertedUser.dataValues.id);
+      res.cookie("userId", insertedUser.dataValues.id);
       res.redirect("http://localhost:8080/#/dashboard");
       return;
     }

@@ -15,22 +15,17 @@ export default new Vuex.Store({
   getters: {},
   mutations: {
     setToken(state, payload) {
-      localStorage.setItem("accessToken", payload.accessToken);
       localStorage.setItem("userId", payload.userId);
     },
     direct(state, vi) {
       (async function () {
         try {
-          if (!localStorage.getItem("accessToken")) {
-            vi.$router.push("/login");
-            return;
-          }
           const response = await axios.post(
             `${process.env.VUE_APP_SERVER_ENDPOINT}/api/session/validation`,
             {
-              token: localStorage.getItem("accessToken"),
               userId: state.user.userId || localStorage.getItem("userId"),
-            }
+            },
+            { withCredentials: true }
           );
           console.log("Test connection response", response);
           if (response.status === 200) {
@@ -41,7 +36,7 @@ export default new Vuex.Store({
           }
         } catch (error) {
           console.log("Test connection failed", error);
-          throw error;
+          vi.$router.push("/login");
         }
       })();
     },
@@ -51,7 +46,6 @@ export default new Vuex.Store({
           const response = await axios.post(
             "http://localhost:8000/api/logout",
             {
-              accessToken: state.token || localStorage.getItem("accessToken"),
               userId: state.user.userId || localStorage.getItem("userId"),
             },
             {
