@@ -8,7 +8,11 @@
     <!--display connections -->
     <div class="connections-list">
       <div v-for="connection in filteredConnections" :key="connection.id">
-        <img :src="connection.picture" :alt="connection.username" />
+        <img
+          class="grayed-out"
+          :src="connection.picture"
+          :alt="connection.username"
+        />
         <p>{{ connection.username }}</p>
       </div>
     </div>
@@ -16,92 +20,30 @@
 </template>
 
 <script>
+import { getConnections } from "@/utils/getConnections";
 export default {
   name: "ConnectionList",
   data: () => ({
-    connections: [
-      {
-        id: 33,
-        username: "Joso Udlaga",
-        picture:
-          "https://pbs.twimg.com/profile_images/1535659158523068419/K4tLjf8C_400x400.jpg",
-      },
-      {
-        id: 83,
-        username: "Jack Sparrow",
-        picture:
-          "https://vignette.wikia.nocookie.net/disney/images/9/90/Pirates4JackSparrowPosterCropped.jpg/revision/latest?cb=20151120172626",
-      },
-      {
-        id: 133,
-        username: "Tony Stark",
-        picture:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Robert_Downey%2C_Jr._2012.jpg/1200px-Robert_Downey%2C_Jr._2012.jpg",
-      },
-      {
-        id: 34,
-        username: "Joso Udlaga",
-        picture:
-          "https://pbs.twimg.com/profile_images/1535659158523068419/K4tLjf8C_400x400.jpg",
-      },
-      {
-        id: 84,
-        username: "Jack Sparrow",
-        picture:
-          "https://vignette.wikia.nocookie.net/disney/images/9/90/Pirates4JackSparrowPosterCropped.jpg/revision/latest?cb=20151120172626",
-      },
-      {
-        id: 134,
-        username: "Tony Stark",
-        picture:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Robert_Downey%2C_Jr._2012.jpg/1200px-Robert_Downey%2C_Jr._2012.jpg",
-      },
-      {
-        id: 35,
-        username: "Joso Udlaga",
-        picture:
-          "https://pbs.twimg.com/profile_images/1535659158523068419/K4tLjf8C_400x400.jpg",
-      },
-      {
-        id: 85,
-        username: "Jack Sparrow",
-        picture:
-          "https://vignette.wikia.nocookie.net/disney/images/9/90/Pirates4JackSparrowPosterCropped.jpg/revision/latest?cb=20151120172626",
-      },
-      {
-        id: 135,
-        username: "Tony Stark",
-        picture:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Robert_Downey%2C_Jr._2012.jpg/1200px-Robert_Downey%2C_Jr._2012.jpg",
-      },
-      {
-        id: 36,
-        username: "Joso Udlaga",
-        picture:
-          "https://pbs.twimg.com/profile_images/1535659158523068419/K4tLjf8C_400x400.jpg",
-      },
-      {
-        id: 86,
-        username: "Jack Sparrow",
-        picture:
-          "https://vignette.wikia.nocookie.net/disney/images/9/90/Pirates4JackSparrowPosterCropped.jpg/revision/latest?cb=20151120172626",
-      },
-      {
-        id: 136,
-        username: "Tony Stark",
-        picture:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Robert_Downey%2C_Jr._2012.jpg/1200px-Robert_Downey%2C_Jr._2012.jpg",
-      },
-    ],
+    connections: [],
     search: "",
   }),
+  mounted() {
+    // fetch connections from backend
+    getConnections().then((connections) => {
+      this.connections = connections;
+    });
+  },
   computed: {
     filteredConnections() {
-      return this.connections.filter((connection) => {
-        return connection.username
-          .toLowerCase()
-          .includes(this.search.toLowerCase());
-      });
+      return this.connections
+        .filter((connection) => {
+          return connection.username
+            .toLowerCase()
+            .includes(this.search.toLowerCase());
+        })
+        .sort((a, b) => {
+          return a.username.toLowerCase() > b.username.toLowerCase() ? 1 : -1;
+        });
     },
   },
 };
@@ -156,7 +98,15 @@ img {
   width: 75px;
   height: 75px;
   border-radius: 50%;
-  border: 1px solid #ccc;
+  border: 3px solid #ccc;
   box-shadow: 0 0 5px #ccc;
+}
+
+.grayed-out {
+  filter: grayscale(1);
+}
+
+p {
+  font-size: 0.7rem;
 }
 </style>

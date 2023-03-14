@@ -4,6 +4,7 @@ const { authThroughGoogle } = require("../controllers/googleAuth");
 const { logout } = require("../controllers/logout");
 const { verifyToken } = require("../utils/jwt");
 const { sessionValidation } = require("../controllers/sessionValidation");
+const { getConnections } = require("../controllers/getConnections");
 
 //controllers
 const { createUser, getUserByID, getUsers, deleteUser, updateUser } = require("../controllers/users");
@@ -24,6 +25,8 @@ router.post("/testToken", verifyToken, checkTokenBlacklist, (req, res) => {
 router.get("/users", getUsers);
 
 router.post("/session/validation", sessionValidation);
+
+router.get("/connections", getConnections);
 
 router.post("/logout", logout);
 

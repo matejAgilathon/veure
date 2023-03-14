@@ -2,34 +2,53 @@
   <div class="dashboard">
     <nav>
       <div>Hello, {{ $store.state.user.username }}</div>
-      <img :src="$store.state.user.userPhotoUrl" alt="user photo" />
-      <LogoutButton />
+      <div>
+        <img
+          class="profile-image"
+          :src="$store.state.user.userPhotoUrl"
+          alt="user photo"
+        />
+        <img
+          class="menu-icon"
+          :src="menuIcon"
+          alt="menu"
+          @click="($event) => (menu = !menu)"
+        />
+      </div>
+      <NavBarDropdown v-show="menu" />
     </nav>
     <ConnectionsList />
-    <!-- <button @click="testTokenRoute">Test Route</button> -->
   </div>
 </template>
 
 <script>
 import VueCookies from "vue-cookies";
-import LogoutButton from "@/components/LogoutButton";
 import ConnectionsList from "@/components/ConnectionsList";
+import NavBarDropdown from "@/components/NavBarDropdown";
 
 export default {
   name: "DashboardView",
+  data() {
+    return {
+      menu: false,
+    };
+  },
   created() {
-    // this.$store.commit("testConnection");
     this.$store.state.user.username = VueCookies.get("username");
     this.$store.state.user.userPhotoUrl = VueCookies.get("picture");
     this.$store.state.user.userId = VueCookies.get("userId");
     this.$store.commit("setToken", {
-      accessToken: VueCookies.get("token"),
       userId: VueCookies.get("userId"),
     });
   },
   components: {
-    LogoutButton,
     ConnectionsList,
+    NavBarDropdown,
+  },
+  computed: {
+    menuIcon() {
+      return `../assets/${this.menu ? "close" : "ham"}-menu.svg`;
+    },
   },
   methods: {
     testTokenRoute() {
@@ -57,7 +76,6 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  // height: 80vh;
   gap: 1rem;
 }
 nav {
@@ -66,15 +84,16 @@ nav {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  // padding: 1rem;
 }
-//make img round with shadow an border
-img {
-  // width: 150px;
-  // height: 150px;
+.profile-image {
+  margin-right: 1em;
   height: 2em;
   border-radius: 50%;
   border: 1px solid #ccc;
   box-shadow: 0 0 5px #ccc;
+}
+.menu-icon {
+  cursor: pointer;
+  width: 2em;
 }
 </style>
