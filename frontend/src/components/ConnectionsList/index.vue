@@ -1,11 +1,6 @@
 <template>
   <div class="connections">
-    <!--<h1>Connections</h1>-->
-    <!--filter connections -->
     <input class="filter" type="text" placeholder="Search" v-model="search" />
-    <!--add new connection -->
-    <!--<button class="add-connection-button">Add new</button>-->
-    <!--display connections -->
     <div class="connections-list">
       <div v-for="connection in filteredConnections" :key="connection.id">
         <img
@@ -28,8 +23,8 @@ export default {
     search: "",
   }),
   mounted() {
-    //const checkRoute....
-    getConnections(this.$route.path).then((connections) => {
+    const route = this.$route.path === "/dashboard" ? "dashboard" : "connect";
+    getConnections(route).then((connections) => {
       this.connections = connections;
     });
   },

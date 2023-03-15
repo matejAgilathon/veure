@@ -24,7 +24,7 @@ const routes = [
     component: DashboardView,
   },
   {
-    path: "/connections/new",
+    path: "/connections",
     name: "connect",
     component: ConnectView,
   },
