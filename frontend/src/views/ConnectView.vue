@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <nav>
-      <div>Here you can add new connections.</div>
+      <div>Add new connections.</div>
       <div>
         <img
           class="profile-image"

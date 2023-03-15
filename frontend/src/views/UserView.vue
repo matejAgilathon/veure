@@ -7,7 +7,7 @@
         alt="user profile image"
       />
     </div>
-    <div class="profile-view__bio">{{ bio }}</div>
+    <p class="profile-view__bio">{{ bio }}</p>
     <div class="profile-view__username">{{ username }}</div>
     <button class="profile-view__button">Connect</button>
   </div>

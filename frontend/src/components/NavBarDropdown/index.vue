@@ -1,10 +1,12 @@
-<!-- navbar dropddown component including logout button -->
 <template>
   <div class="navbar-dropdown">
     <div @click="($event) => $router.push(`/${navRouteName}`)">
       Go to {{ navRouteName }}
     </div>
-    <div>Placeholder option</div>
+    <div>
+      Received requests
+      <span>{{ receivedRequests }}</span>
+    </div>
     <LogoutButton />
   </div>
 </template>
@@ -26,13 +28,10 @@ export default {
     userPhotoUrl() {
       return this.$store.state.user.userPhotoUrl;
     },
+    receivedRequests() {
+      return this.$store.state.user.receivedRequests.length || "";
+    },
   },
-  // methods: {
-  //   //push to connections/new route
-  //   routeConnectionsNew() {
-  //     this.$router.push("/connections/new");
-  //   },
-  // },
 };
 </script>
 

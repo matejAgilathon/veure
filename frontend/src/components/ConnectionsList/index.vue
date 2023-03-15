@@ -114,10 +114,15 @@ img {
   border-radius: 50%;
   border: 3px solid #ccc;
   box-shadow: 0 0 5px #ccc;
+  filter: grayscale(1);
 }
 
-.grayed-out {
-  filter: grayscale(1);
+// .grayed-out {
+//   filter: grayscale(1);
+// }
+
+img:hover {
+  filter: grayscale(0);
 }
 
 p {

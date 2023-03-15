@@ -10,6 +10,7 @@ export default new Vuex.Store({
       userId: "",
       username: "",
       userPhotoUrl: "",
+      receivedRequests: [],
     },
     connection: {
       connectionId: "",
