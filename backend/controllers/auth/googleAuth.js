@@ -1,7 +1,7 @@
 const axios = require("axios");
-const { encode, isTokenValid } = require("../utils/jwt");
-const { insertUser } = require("../utils/insertUser");
-const { User } = require("../models");
+const { encode, isTokenValid } = require("../../utils/jwt");
+const { insertUser } = require("../../utils/insertUser");
+const { User } = require("../../models");
 
 const authThroughGoogle = async (req, res) => {
   try {

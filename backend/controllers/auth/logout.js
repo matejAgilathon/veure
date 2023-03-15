@@ -1,4 +1,4 @@
-const { RefreshToken, User } = require("../models");
+const { RefreshToken, User } = require("../../models");
 
 const logout = async (req, res) => {
   try {

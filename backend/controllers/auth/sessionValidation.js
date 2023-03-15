@@ -1,4 +1,4 @@
-const { User, BlacklistedToken } = require("../models");
+const { User, BlacklistedToken } = require("../../models");
 const jwt = require("jsonwebtoken");
 
 const sessionValidation = async (req, res) => {

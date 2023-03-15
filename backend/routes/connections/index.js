@@ -1,10 +1,10 @@
 const { Router } = require("express");
-const { getConnections } = require("../../controllers/getConnections");
+const { getConnections, connectRequest } = require("../../controllers/connections");
 
 const router = Router();
 
 router.get("/", getConnections);
 router.get("/:id", getConnections);
-// router.post("/", connectRequest);
+router.post("/:id", connectRequest);
 
 module.exports = router;

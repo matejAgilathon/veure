@@ -1,3 +1,5 @@
+const { User } = require("../../models");
+
 const connectRequest = async (req, res) => {
   try {
     const { userId, connectionId } = req.body;
