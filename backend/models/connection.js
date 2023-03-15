@@ -29,10 +29,6 @@ module.exports = (sequelize, DataTypes) => {
   };
 
 
-
-
-
-
 // module.exports = (sequelize, DataTypes) => {
 //   const Connection = sequelize.define("Connection", {
 //     value: {
