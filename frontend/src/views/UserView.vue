@@ -18,13 +18,13 @@ export default {
   name: "ProfileView",
   computed: {
     username() {
-      return this.$store.state.user.username;
+      return this.$store.state.connection.username;
     },
     userPhotoUrl() {
-      return this.$store.state.user.userPhotoUrl;
+      return this.$store.state.connection.userPhotoUrl;
     },
     bio() {
-      return this.$store.state.user.bio;
+      return this.$store.state.connection.bio;
     },
   },
 };

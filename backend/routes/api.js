@@ -29,6 +29,7 @@ router.post("/session/validation", sessionValidation);
 
 //connections
 router.get("/connections", verifyToken, getConnections);
+router.get("/connections/:id", verifyToken, getConnections);
 router.post("/connections", connectRequest);
 
 router.post("/logout", logout);

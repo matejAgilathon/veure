@@ -2,7 +2,16 @@
   <div class="connections">
     <input class="filter" type="text" placeholder="Search" v-model="search" />
     <div class="connections-list">
-      <div v-for="connection in filteredConnections" :key="connection.id">
+      <p v-if="!connections.length">
+        No connections found. Go to the Add new connections page to add new
+        connections.
+      </p>
+      <div
+        v-else
+        v-for="connection in filteredConnections"
+        :key="connection.id"
+        @click="($event) => connectionProfile(connection.id)"
+      >
         <img
           class="grayed-out"
           :src="connection.picture"
@@ -41,6 +50,14 @@ export default {
         .sort((a, b) => {
           return a.username.toLowerCase() > b.username.toLowerCase() ? 1 : -1;
         });
+    },
+  },
+  methods: {
+    connectionProfile(connectionId) {
+      this.$store.commit("getConnection", {
+        connectionId,
+        router: this.$router,
+      });
     },
   },
 };

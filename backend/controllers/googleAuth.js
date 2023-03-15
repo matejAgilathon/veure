@@ -64,7 +64,7 @@ const authThroughGoogle = async (req, res) => {
           err: "refresh token is not valid",
         });
       }
-      const ourOwnToken = encode(body, "30s");
+      const ourOwnToken = encode(body, "15m");
       res.cookie("token", ourOwnToken, { httpOnly: true });
       res.cookie("username", user.dataValues.username);
       res.cookie("picture", user.dataValues.picture);
@@ -75,7 +75,7 @@ const authThroughGoogle = async (req, res) => {
       const insertedUser = await insertUser(body);
       const refreshTokenString = encode(body, "5d");
       insertedUser.createRefreshToken({ value: refreshTokenString });
-      const ourOwnToken = encode(body, "30s");
+      const ourOwnToken = encode(body, "15m");
       //insert token into database
       res.cookie("token", ourOwnToken, { httpOnly: true });
       res.cookie("username", insertedUser.dataValues.username);

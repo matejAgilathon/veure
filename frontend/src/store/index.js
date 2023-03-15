@@ -11,6 +11,12 @@ export default new Vuex.Store({
       username: "",
       userPhotoUrl: "",
     },
+    connection: {
+      connectionId: "",
+      userPhotoUrl: "",
+      username: "",
+      bio: "",
+    },
   },
   getters: {},
   mutations: {
@@ -63,6 +69,28 @@ export default new Vuex.Store({
           }
         } catch (error) {
           console.log("Logout failed", error);
+          throw error;
+        }
+      })();
+    },
+    getConnection(state, payload) {
+      const { router, connectionId } = payload;
+      (async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8000/api/connections/${connectionId}`,
+            {
+              withCredentials: true,
+            }
+          );
+          if (response.status === 200) {
+            state.connection.connectionId = connectionId;
+            state.connection.userPhotoUrl = response.data.picture;
+            state.connection.username = response.data.username;
+          }
+          router.push(`/users/${connectionId}`);
+        } catch (error) {
+          console.log("Set connection failed", error);
           throw error;
         }
       })();
