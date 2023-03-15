@@ -1,5 +1,5 @@
 //controlers for user
-
+const jwt = require("jsonwebtoken");
 const { User } = require("../models");
 // const { verifyToken, encode } = require("../utils/verifyToken");
 // const { Op } = require("sequelize");
@@ -22,9 +22,20 @@ const { User } = require("../models");
 
 const getUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    //unpack teh cookie
+    // const { token } = req.cookies;
+    const { userId } = req.cookies;
+    //verify the token
+    // const decoded = jwt.verify(token, process.env.SESSION_SECRET);
+    // const { userId } = decoded;
+    const users = await User.findAll(
+      // {
+      // attributes: ["id", "username", "picture"],
+    // }
+    );
     console.log(users);
-    res.json(users);
+    const filteredUsers = users.filter((user) => user.id !== userId)
+    res.json(filteredUsers);
   } catch (err) {
     console.log(`unhandled error ` + err);
   }

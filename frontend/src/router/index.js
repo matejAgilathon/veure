@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import DashboardView from "../views/DashboardView.vue";
 import HomeView from "../views/HomeView.vue";
+import ConnectView from "../views/ConnectView.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes = [
     path: "/dashboard",
     name: "dashboard",
     component: DashboardView,
+  },
+  {
+    path: "/connections/new",
+    name: "connect",
+    component: ConnectView,
   },
   // {
   //   path: "/about",

@@ -1,7 +1,9 @@
 <!-- navbar dropddown component including logout button -->
 <template>
   <div class="navbar-dropdown">
-    <div>Add new connections</div>
+    <div @click="($event) => $router.push('/connections/new')">
+      Add new connections
+    </div>
     <div>Placeholder option</div>
     <LogoutButton />
   </div>
@@ -22,6 +24,12 @@ export default {
       return this.$store.state.user.userPhotoUrl;
     },
   },
+  // methods: {
+  //   //push to connections/new route
+  //   routeConnectionsNew() {
+  //     this.$router.push("/connections/new");
+  //   },
+  // },
 };
 </script>
 

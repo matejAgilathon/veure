@@ -5,6 +5,7 @@ const { logout } = require("../controllers/logout");
 const { verifyToken } = require("../utils/jwt");
 const { sessionValidation } = require("../controllers/sessionValidation");
 const { getConnections } = require("../controllers/getConnections");
+const { connectRequest } = require("../controllers/connectRequest");
 
 //controllers
 const { createUser, getUserByID, getUsers, deleteUser, updateUser } = require("../controllers/users");
@@ -26,7 +27,10 @@ router.get("/users", getUsers);
 
 router.post("/session/validation", sessionValidation);
 
+//connections
 router.get("/connections", getConnections);
+router.post("/connections", connectRequest);
+router.get("/connections/new", getUsers);
 
 router.post("/logout", logout);
 

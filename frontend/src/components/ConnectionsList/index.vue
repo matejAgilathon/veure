@@ -1,10 +1,10 @@
 <template>
   <div class="connections">
-    <h1>Connections</h1>
+    <!--<h1>Connections</h1>-->
     <!--filter connections -->
     <input class="filter" type="text" placeholder="Search" v-model="search" />
     <!--add new connection -->
-    <button class="add-connection-button">Add new</button>
+    <!--<button class="add-connection-button">Add new</button>-->
     <!--display connections -->
     <div class="connections-list">
       <div v-for="connection in filteredConnections" :key="connection.id">
@@ -28,15 +28,17 @@ export default {
     search: "",
   }),
   mounted() {
-    // fetch connections from backend
-    getConnections().then((connections) => {
+    //const checkRoute....
+    getConnections(this.$route.path).then((connections) => {
       this.connections = connections;
     });
   },
   computed: {
     filteredConnections() {
+      console.log(this.connections);
       return this.connections
         .filter((connection) => {
+          if (!connection.username) return false;
           return connection.username
             .toLowerCase()
             .includes(this.search.toLowerCase());
@@ -73,15 +75,15 @@ export default {
   max-width: calc(33.33% - 1em); /* set max width to one-third minus gap */
 }
 
-.add-connection-button {
-  width: 10em;
-  padding: 0.5em;
-  border: 1px solid #ccc;
-  border-radius: 0.5em;
-  outline: none;
-  margin-bottom: 1em;
-  cursor: pointer;
-}
+// .add-connection-button {
+//   width: 10em;
+//   padding: 0.5em;
+//   border: 1px solid #ccc;
+//   border-radius: 0.5em;
+//   outline: none;
+//   margin-bottom: 1em;
+//   cursor: pointer;
+// }
 
 .filter {
   width: 10em;

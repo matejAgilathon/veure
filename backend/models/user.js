@@ -29,6 +29,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
       as: "blacklistedTokens",
     });
+    User.belongsToMany(User, {
+      through: "Connections",
+      as: "connections",
+      foreignKey: "userId",
+      otherKey: "connectionId",
+    });
   };
 
   return User;
