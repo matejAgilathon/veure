@@ -32,8 +32,7 @@ export default {
     search: "",
   }),
   mounted() {
-    const route = this.$route.path === "/dashboard" ? "dashboard" : "connect";
-    getConnections(route).then((connections) => {
+    getConnections(this.$route.path.slice(1)).then((connections) => {
       this.connections = connections;
     });
   },
