@@ -13,9 +13,6 @@ const connectRequest = async (req, res) => {
       userId: Number(userId),
       connectionId: Number(id),
     });
-    // const connectionRequest = await user.createConnection({
-    //   connectionId: Number(id),
-    // });
     res.status(201).json({ success: true, connectionRequest });
   } catch (err) {
     console.log(err);
