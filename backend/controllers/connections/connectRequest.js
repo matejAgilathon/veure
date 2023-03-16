@@ -1,4 +1,4 @@
-const { User } = require("../../models");
+const { User, Connection } = require("../../models");
 
 const connectRequest = async (req, res) => {
   try {
@@ -9,9 +9,13 @@ const connectRequest = async (req, res) => {
     if (!user || !connection) {
       return res.status(404).json({ success: false, err: "User not found" });
     }
-    const connectionRequest = await user.createConnection({
+    const connectionRequest = await Connection.create({
+      userId: Number(userId),
       connectionId: Number(id),
     });
+    // const connectionRequest = await user.createConnection({
+    //   connectionId: Number(id),
+    // });
     res.status(201).json({ success: true, connectionRequest });
   } catch (err) {
     console.log(err);
