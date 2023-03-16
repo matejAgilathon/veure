@@ -3,6 +3,9 @@ import VueRouter from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import DashboardView from "../views/DashboardView.vue";
 import HomeView from "../views/HomeView.vue";
+import ConnectView from "../views/ConnectView.vue";
+import ProfileView from "../views/ProfileView.vue";
+import UserView from "../views/UserView.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +24,21 @@ const routes = [
     path: "/dashboard",
     name: "dashboard",
     component: DashboardView,
+  },
+  {
+    path: "/connections",
+    name: "connect",
+    component: ConnectView,
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: ProfileView,
+  },
+  {
+    path: "/users/:id",
+    name: "user",
+    component: UserView,
   },
   // {
   //   path: "/about",

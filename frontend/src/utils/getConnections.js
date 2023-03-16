@@ -1,9 +1,16 @@
-export const getConnections = async () => {
+import axios from "axios";
+
+export const getConnections = async (route) => {
   try {
-    const response = await fetch(`
-      ${process.env.VUE_APP_SERVER_ENDPOINT}/api/connections`);
-    const data = await response.json();
-    return data;
+    const response = await axios.get(
+      `${process.env.VUE_APP_SERVER_ENDPOINT}/api/connections?type=${
+        route === "dashboard" ? "old" : "new"
+      }`,
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
   } catch (err) {
     console.log(err);
   }

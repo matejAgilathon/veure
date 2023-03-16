@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <nav>
-      <div>Hello, {{ $store.state.user.username }}</div>
+      <div>Add new connections.</div>
       <div>
         <img
           class="profile-image"
@@ -22,26 +22,17 @@
 </template>
 
 <script>
-import VueCookies from "vue-cookies";
 import ConnectionsList from "@/components/ConnectionsList";
 import NavBarDropdown from "@/components/NavBarDropdown";
 import MENU_CLOSE_ICON from "@/assets/close-menu.svg";
 import MENU_HAM_ICON from "@/assets/ham-menu.svg";
 
 export default {
-  name: "DashboardView",
+  name: "ConnectView",
   data() {
     return {
       menu: false,
     };
-  },
-  created() {
-    this.$store.state.user.username = VueCookies.get("username");
-    this.$store.state.user.userPhotoUrl = VueCookies.get("picture");
-    this.$store.state.user.userId = VueCookies.get("userId");
-    this.$store.commit("setToken", {
-      userId: VueCookies.get("userId"),
-    });
   },
   components: {
     ConnectionsList,

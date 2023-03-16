@@ -1,8 +1,12 @@
-<!-- navbar dropddown component including logout button -->
 <template>
   <div class="navbar-dropdown">
-    <div>Add new connections</div>
-    <div>Placeholder option</div>
+    <div @click="($event) => $router.push(`/${navRouteName}`)">
+      Go to {{ navRouteName }}
+    </div>
+    <div>
+      Received requests
+      <span>{{ receivedRequests }}</span>
+    </div>
     <LogoutButton />
   </div>
 </template>
@@ -15,11 +19,17 @@ export default {
     LogoutButton,
   },
   computed: {
+    navRouteName() {
+      return this.$route.path === "/dashboard" ? "connections" : "dashboard";
+    },
     username() {
       return this.$store.state.user.username;
     },
     userPhotoUrl() {
       return this.$store.state.user.userPhotoUrl;
+    },
+    receivedRequests() {
+      return this.$store.state.user.receivedRequests.length || "";
     },
   },
 };
