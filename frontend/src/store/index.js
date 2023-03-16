@@ -96,6 +96,27 @@ export default new Vuex.Store({
         }
       })();
     },
+    connect(state) {
+      (async () => {
+        try {
+          const response = await axios.post(
+            `http://localhost:8000/api/connections/${state.connection.connectionId}`,
+            {
+              userId: state.user.userId,
+            },
+            {
+              withCredentials: true,
+            }
+          );
+          if (response.status === 201) {
+            console.log("Connection request sent");
+          }
+        } catch (error) {
+          console.log("Connection request failed", error);
+          throw error;
+        }
+      })();
+    },
   },
   actions: {},
   modules: {},

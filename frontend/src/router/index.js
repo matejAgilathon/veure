@@ -6,6 +6,7 @@ import HomeView from "../views/HomeView.vue";
 import ConnectView from "../views/ConnectView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import UserView from "../views/UserView.vue";
+import RequestsView from "../views/RequestsView.vue";
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,11 @@ const routes = [
     path: "/users/:id",
     name: "user",
     component: UserView,
+  },
+  {
+    path: "/requests",
+    name: "requests",
+    component: RequestsView,
   },
   // {
   //   path: "/about",

@@ -9,13 +9,18 @@
     </div>
     <p class="profile-view__bio">{{ bio }}</p>
     <div class="profile-view__username">{{ username }}</div>
-    <button class="profile-view__button">Connect</button>
+    <button
+      class="profile-view__button"
+      @click="($event) => $store.commit('connect')"
+    >
+      Connect
+    </button>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ProfileView",
+  name: "UserView",
   computed: {
     username() {
       return this.$store.state.connection.username;
@@ -52,7 +57,7 @@ export default {
     font-weight: 600;
   }
   &__button {
-    background-color: #4caf50; /* Green */
+    background-color: #4caf50;
     border: none;
     color: white;
     padding: 15px 32px;

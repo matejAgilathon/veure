@@ -3,7 +3,10 @@
     <div @click="($event) => $router.push(`/${navRouteName}`)">
       Go to {{ navRouteName }}
     </div>
-    <div>
+    <div
+      v-show="!isRouteRequests"
+      @click="($event) => $router.push('/requests')"
+    >
       Received requests
       <span>{{ receivedRequests }}</span>
     </div>
@@ -30,6 +33,9 @@ export default {
     },
     receivedRequests() {
       return this.$store.state.user.receivedRequests.length || "";
+    },
+    isRouteRequests() {
+      return this.$route.path === "/requests";
     },
   },
 };

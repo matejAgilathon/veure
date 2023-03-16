@@ -1,7 +1,7 @@
 <template>
-  <div class="connect">
+  <div class="dashboard">
     <nav>
-      <div>Received requests</div>
+      <div>Add new connections.</div>
       <div>
         <img
           class="profile-image"
@@ -64,7 +64,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.connect {
+.dashboard {
   display: flex;
   flex-direction: column;
   align-items: center;
