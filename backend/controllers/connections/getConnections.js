@@ -19,7 +19,7 @@ const getConnections = async (req, res) => {
     if (type === "old") {
       if (!userId)
         return res.status(401).json({ success: false, err: "Unauthorized" });
-      const user = await User.findByPk(userId);
+      const user = await User.findByPk(Number(userId));
       if (!user)
         return res.status(404).json({ success: false, err: "User not found" });
       //get all the connections

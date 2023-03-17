@@ -1,6 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
   const Connection = sequelize.define("Connection", {
-    //id is combination of userId and connectionId
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

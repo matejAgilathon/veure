@@ -9,12 +9,30 @@
     </div>
     <p class="profile-view__bio">{{ bio }}</p>
     <div class="profile-view__username">{{ username }}</div>
-    <button
-      class="profile-view__button"
-      @click="($event) => $store.commit('connect')"
+    <div v-if="$store.state.connection.connectionStatus === 'pending'">
+      <button
+        class="profile-view__accept-button"
+        @click="($event) => $store.commit('acceptRequest')"
+      >
+        Accept
+      </button>
+      <button
+        class="profile-view__reject-button"
+        @click="($event) => $store.commit('rejectRequest')"
+      >
+        Reject
+      </button>
+    </div>
+    <div
+      v-else-if="$store.state.connection.connectionStatus === 'not-connected'"
     >
-      Connect
-    </button>
+      <button
+        class="profile-view__button"
+        @click="($event) => $store.commit('connect')"
+      >
+        Connect
+      </button>
+    </div>
   </div>
 </template>
 

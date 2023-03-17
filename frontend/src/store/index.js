@@ -17,6 +17,7 @@ export default new Vuex.Store({
       userPhotoUrl: "",
       username: "",
       bio: "",
+      connectionStatus: "",
     },
   },
   getters: {},
@@ -34,7 +35,6 @@ export default new Vuex.Store({
             },
             { withCredentials: true }
           );
-          console.log("Test connection response", response);
           if (response.status === 200) {
             state.user.userPhotoUrl = response.data.userPhotoUrl;
             state.user.username = response.data.username;
@@ -59,7 +59,6 @@ export default new Vuex.Store({
               withCredentials: true,
             }
           );
-          console.log("Logout response", response);
           if (response.status === 204) {
             state.token = "";
             state.user.username = "";
@@ -88,6 +87,12 @@ export default new Vuex.Store({
             state.connection.connectionId = connectionId;
             state.connection.userPhotoUrl = response.data.picture;
             state.connection.username = response.data.username;
+            if (router.currentRoute.path === "/dashboard")
+              state.connection.connectionStatus = "connected";
+            if (router.currentRoute.path === "/connections")
+              state.connection.connectionStatus = "not-connected";
+            if (router.currentRoute.path === "/requests")
+              state.connection.connectionStatus = "pending";
           }
           router.push(`/users/${connectionId}`);
         } catch (error) {
@@ -113,6 +118,48 @@ export default new Vuex.Store({
           }
         } catch (error) {
           console.log("Connection request failed", error);
+          throw error;
+        }
+      })();
+    },
+    acceptRequest(state) {
+      (async () => {
+        try {
+          const response = await axios.put(
+            `http://localhost:8000/api/connections/${state.connection.connectionId}`,
+            {
+              userId: state.user.userId,
+            },
+            {
+              withCredentials: true,
+            }
+          );
+          if (response.status === 204) {
+            console.log("Accepting connection request successful");
+          }
+        } catch (error) {
+          console.log("Accepting connection request failed", error);
+          throw error;
+        }
+      })();
+    },
+    rejectRequest(state) {
+      (async () => {
+        try {
+          const response = await axios.delete(
+            `http://localhost:8000/api/connections/${state.connection.connectionId}`,
+            {
+              userId: state.user.userId,
+            },
+            {
+              withCredentials: true,
+            }
+          );
+          if (response.status === 204) {
+            console.log("Rejection successful");
+          }
+        } catch (error) {
+          console.log("Rejection failed", error);
           throw error;
         }
       })();
