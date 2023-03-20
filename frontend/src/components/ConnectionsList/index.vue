@@ -38,7 +38,6 @@ export default {
   },
   computed: {
     filteredConnections() {
-      console.log(this.connections);
       return this.connections
         .filter((connection) => {
           if (!connection.username) return false;
@@ -63,15 +62,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// style logout button
-// .logout {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   height: 80vh;
-//   gap: 1rem;
-// }
 .connections-list {
   display: flex;
   flex-direction: row;
@@ -86,16 +76,6 @@ export default {
   max-width: calc(33.33% - 1em); /* set max width to one-third minus gap */
 }
 
-// .add-connection-button {
-//   width: 10em;
-//   padding: 0.5em;
-//   border: 1px solid #ccc;
-//   border-radius: 0.5em;
-//   outline: none;
-//   margin-bottom: 1em;
-//   cursor: pointer;
-// }
-
 .filter {
   width: 10em;
   padding: 0.5em;
@@ -106,7 +86,6 @@ export default {
   margin-right: 1em;
 }
 
-//make img round with shadow an border
 img {
   width: 75px;
   height: 75px;
@@ -115,10 +94,6 @@ img {
   box-shadow: 0 0 5px #ccc;
   filter: grayscale(1);
 }
-
-// .grayed-out {
-//   filter: grayscale(1);
-// }
 
 img:hover {
   filter: grayscale(0);
