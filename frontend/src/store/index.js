@@ -123,10 +123,11 @@ export default new Vuex.Store({
       })();
     },
     acceptRequest(state) {
+      const url = `http://localhost:8000/api/connections/${state.connection.connectionId}`;
       (async () => {
         try {
           const response = await axios.put(
-            `http://localhost:8000/api/connections/${state.connection.connectionId}`,
+            url,
             {
               userId: state.user.userId,
             },
@@ -147,7 +148,7 @@ export default new Vuex.Store({
       (async () => {
         try {
           const response = await axios.delete(
-            `http://localhost:8000/api/connections/${state.connection.connectionId}`,
+            url,
             {
               userId: state.user.userId,
             },
