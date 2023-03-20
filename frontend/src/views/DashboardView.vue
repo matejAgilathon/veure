@@ -27,7 +27,6 @@ import ConnectionsList from "@/components/ConnectionsList";
 import NavBarDropdown from "@/components/NavBarDropdown";
 import MENU_CLOSE_ICON from "@/assets/close-menu.svg";
 import MENU_HAM_ICON from "@/assets/ham-menu.svg";
-
 export default {
   name: "DashboardView",
   data() {
@@ -50,23 +49,6 @@ export default {
   computed: {
     menuIcon() {
       return this.menu ? MENU_CLOSE_ICON : MENU_HAM_ICON;
-    },
-  },
-  methods: {
-    testTokenRoute() {
-      const uri = `${process.env.VUE_APP_SERVER_ENDPOINT}/api/testToken`;
-      fetch(uri, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        },
-        body: JSON.stringify({
-          username: this.$store.state.user.username,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => console.log(data))
-        .catch((error) => console.log(error));
     },
   },
 };

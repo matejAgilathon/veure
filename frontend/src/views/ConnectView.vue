@@ -1,7 +1,7 @@
 <template>
   <div class="connect">
     <nav>
-      <div>Received requests</div>
+      <div>Add new connections.</div>
       <div>
         <img
           class="profile-image"
