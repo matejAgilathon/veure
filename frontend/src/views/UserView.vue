@@ -9,7 +9,7 @@
     </div>
     <p class="profile-view__bio">{{ bio }}</p>
     <div class="profile-view__username">{{ username }}</div>
-    <div v-if="$store.state.connection.connectionStatus === 'pending'">
+    <div v-if="checkConnectionStatus() === 'pending'">
       <button
         class="profile-view__accept-button"
         @click="($event) => $store.commit('acceptRequest')"
@@ -24,7 +24,7 @@
       </button>
     </div>
     <div
-      v-else-if="$store.state.connection.connectionStatus === 'not-connected'"
+      v-else-if="checkConnectionStatus() === 'not-connected'"
     >
       <button
         class="profile-view__button"
@@ -48,6 +48,9 @@ export default {
     },
     bio() {
       return this.$store.state.connection.bio;
+    },
+    checkConnectionStatus() {
+      return this.$store.state.connection?.connectionStatus;
     },
   },
 };
